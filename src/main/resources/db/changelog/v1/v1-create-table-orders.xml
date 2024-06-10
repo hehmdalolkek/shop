@@ -3,7 +3,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="v1-3" author="hehmdalolkek">
+    <changeSet id="v1-2" author="hehmdalolkek">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="orders"/>
@@ -18,13 +18,6 @@
             </column>
             <column name="total_cost" type="double"/>
         </createTable>
-    </changeSet>
-
-    <changeSet id="v1-4" author="hehmdalolkek">
-        <preConditions onFail="MARK_RAN">
-            <tableIsEmpty tableName="orders"/>
-        </preConditions>
-        <loadData tableName="orders" file="db/data/orders-data.csv"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -22,11 +22,4 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="v1-2" author="hehmdalolkek">
-        <preConditions onFail="MARK_RAN">
-            <tableIsEmpty tableName="products"/>
-        </preConditions>
-        <loadData tableName="products" file="db/data/products-data.csv"/>
-    </changeSet>
-
 </databaseChangeLog>

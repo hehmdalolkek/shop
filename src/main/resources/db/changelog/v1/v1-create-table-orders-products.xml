@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="v1-5" author="hehmdalolkek">
+    <changeSet id="v1-3" author="hehmdalolkek">
         <preConditions>
             <not>
                 <tableExists tableName="orders_products"/>
@@ -31,13 +31,6 @@
                                  constraintName="fk_orders_products_product_id"
                                  referencedTableName="products" referencedColumnNames="product_id"
                                  onDelete="SET NULL"/>
-    </changeSet>
-
-    <changeSet id="v1-6" author="hehmdalolkek">
-        <preConditions onFail="MARK_RAN">
-            <tableIsEmpty tableName="orders_products"/>
-        </preConditions>
-        <loadData tableName="orders_products" file="db/data/orders_products-data.csv"/>
     </changeSet>
 
 </databaseChangeLog>
