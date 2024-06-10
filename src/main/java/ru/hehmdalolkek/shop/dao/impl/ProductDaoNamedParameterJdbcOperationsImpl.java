@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hehmdalolkek.shop.dao.interfaces.ProductDao;
 import ru.hehmdalolkek.shop.model.Product;
-import ru.hehmdalolkek.shop.model.mapper.ProductRowMapper;
+import ru.hehmdalolkek.shop.dao.mapper.ProductRowMapper;
 
 import java.util.List;
 import java.util.Optional;

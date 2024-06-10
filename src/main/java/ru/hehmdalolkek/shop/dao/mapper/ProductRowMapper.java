@@ -1,4 +1,4 @@
-package ru.hehmdalolkek.shop.model.mapper;
+package ru.hehmdalolkek.shop.dao.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import ru.hehmdalolkek.shop.model.Product;
