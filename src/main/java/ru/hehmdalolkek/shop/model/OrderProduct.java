@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class OrderProduct {
 
-    private int id;
+    private Integer id;
 
     private int orderId;
 

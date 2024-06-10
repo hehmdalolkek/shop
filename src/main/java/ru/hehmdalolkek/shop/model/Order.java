@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class Order {
 
-    private int id;
+    private Integer id;
 
     private LocalDateTime date;
 
