@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="v1-5" author="hehmdalolkek">
+        <preConditions>
+            <not>
+                <tableExists tableName="orders_products"/>
+            </not>
+        </preConditions>
+        <createTable tableName="orders_products">
+            <column name="order_product_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="order_id" type="int">
+                <constraints
+                        referencedTableName="orders"
+                        referencedColumnNames="order_id"
+                        foreignKeyName="fk_orders_products_order_id"
+                        nullable="false"
+                />
+            </column>
+            <column name="product_id" type="int"/>
+            <column name="amount" type="int" defaultValue="1">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="orders_products" baseColumnNames="product_id"
+                                 constraintName="fk_orders_products_product_id"
+                                 referencedTableName="products" referencedColumnNames="product_id"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+
+    <changeSet id="v1-6" author="hehmdalolkek">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="orders_products"/>
+        </preConditions>
+        <loadData tableName="orders_products" file="db/data/orders_products-data.csv"/>
+    </changeSet>
+
+</databaseChangeLog>
