@@ -11,6 +11,8 @@ public interface ProductDao {
 
     Optional<Product> getProductById(int productId);
 
+    Boolean productExistsByTitle(String title);
+
     Product saveProduct(Product product);
 
     void softDeleteProduct(int productId);

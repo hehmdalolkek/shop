@@ -10,6 +10,7 @@ import ru.hehmdalolkek.shop.dao.interfaces.ProductDao;
 import ru.hehmdalolkek.shop.model.Product;
 import ru.hehmdalolkek.shop.model.exception.ProductIsAlreadyExistsException;
 import ru.hehmdalolkek.shop.model.exception.ProductNotFoundException;
+import ru.hehmdalolkek.shop.model.exception.ProductWithCurrentTitleIsAlreadyExistsException;
 import ru.hehmdalolkek.shop.web.dto.ProductDto;
 
 import java.util.List;
@@ -101,6 +102,7 @@ class ProductServiceImplTest {
         // then
         assertThat(savedProduct).isNotNull();
         verify(productDao).getProductById(anyInt());
+        verify(productDao).productExistsByTitle(anyString());
         verify(productDao).saveProduct(any(Product.class));
         verifyNoMoreInteractions(productDao);
     }
@@ -132,6 +134,56 @@ class ProductServiceImplTest {
     }
 
     @Test
+    @DisplayName("Given product with non existing title, when createProduct, then get saved product")
+    public void givenProductWithNonExistingTitle_whenCreateProduct_thenGetSavedProduct() {
+        // given
+        Product product = new Product();
+        product.setId(1);
+        product.setTitle("1234567");
+        product.setActive(true);
+        ProductDto productDto = ProductDto.builder()
+                .title("1234567")
+                .active(true)
+                .build();
+        when(productDao.productExistsByTitle(anyString())).thenReturn(false);
+        when(productDao.saveProduct(any(Product.class))).thenReturn(product);
+
+        // when
+        ProductDto savedProduct = productService.createProduct(productDto);
+
+        // then
+        assertThat(savedProduct).isNotNull();
+        verify(productDao).productExistsByTitle(anyString());
+        verify(productDao).saveProduct(any(Product.class));
+        verifyNoMoreInteractions(productDao);
+    }
+
+    @Test
+    @DisplayName("Given product with existing title, when createProduct, then throw exception")
+    public void givenProductWithExistingTitle_whenCreateProduct_thenThrowException() {
+        // given
+        Product product = new Product();
+        product.setId(1);
+        product.setTitle("1234567");
+        product.setActive(true);
+        ProductDto productDto = ProductDto.builder()
+                .title("1234567")
+                .active(true)
+                .build();
+        when(productDao.productExistsByTitle(anyString())).thenReturn(true);
+
+        // when
+        // then
+        assertThatThrownBy(() -> {
+            productService.createProduct(productDto);
+        })
+                .isInstanceOf(ProductWithCurrentTitleIsAlreadyExistsException.class)
+                .hasMessage("Product with title=1234567 is already exists");
+        verify(productDao).productExistsByTitle(anyString());
+        verifyNoMoreInteractions(productDao);
+    }
+
+    @Test
     @DisplayName("Given product and existing id, when updateProduct, then get updated product")
     public void givenProductAndExistingId_whenUpdateProduct_thenGetUpdatedProduct() {
         // given
@@ -156,6 +208,7 @@ class ProductServiceImplTest {
         // then
         assertThat(updatedProductFromService).isNotNull();
         verify(productDao).getProductById(anyInt());
+        verify(productDao).productExistsByTitle(anyString());
         verify(productDao).saveProduct(any(Product.class));
         verifyNoMoreInteractions(productDao);
     }
@@ -179,6 +232,68 @@ class ProductServiceImplTest {
                 .isInstanceOf(ProductNotFoundException.class)
                 .hasMessage("Product with id=1 not found");
         verify(productDao).getProductById(anyInt());
+        verifyNoMoreInteractions(productDao);
+    }
+
+    @Test
+    @DisplayName("Given product with non existing title, when updateProduct, then get saved product")
+    public void givenProductWithNonExistingTitle_whenUpdateProduct_thenGetSavedProduct() {
+        // given
+        int productId = 1;
+        Product product = new Product();
+        product.setId(productId);
+        product.setTitle("1234567");
+        product.setActive(true);
+        Product foundedProduct = new Product();
+        foundedProduct.setId(productId);
+        ProductDto productDto = ProductDto.builder()
+                .productId(productId)
+                .title("1234567")
+                .active(true)
+                .build();
+        when(productDao.getProductById(anyInt())).thenReturn(Optional.of(foundedProduct));
+        when(productDao.productExistsByTitle(anyString())).thenReturn(false);
+        when(productDao.saveProduct(any(Product.class))).thenReturn(product);
+
+        // when
+        ProductDto updateProduct = productService.updateProduct(productId, productDto);
+
+        // then
+        assertThat(updateProduct).isNotNull();
+        verify(productDao).getProductById(anyInt());
+        verify(productDao).productExistsByTitle(anyString());
+        verify(productDao).saveProduct(any(Product.class));
+        verifyNoMoreInteractions(productDao);
+    }
+
+    @Test
+    @DisplayName("Given product with existing title, when updateProduct, then throws exception")
+    public void givenProductWithExistingTitle_whenUpdateProduct_thenThrowsException() {
+        // given
+        int productId = 1;
+        Product product = new Product();
+        product.setId(productId);
+        product.setTitle("1234567");
+        product.setActive(true);
+        Product foundedProduct = new Product();
+        foundedProduct.setId(productId);
+        ProductDto productDto = ProductDto.builder()
+                .productId(productId)
+                .title("1234567")
+                .active(true)
+                .build();
+        when(productDao.getProductById(anyInt())).thenReturn(Optional.of(foundedProduct));
+        when(productDao.productExistsByTitle(anyString())).thenReturn(true);
+
+        // when
+        // then
+        assertThatThrownBy(() -> {
+            productService.updateProduct(productId, productDto);
+        })
+                .isInstanceOf(ProductWithCurrentTitleIsAlreadyExistsException.class)
+                .hasMessage("Product with title=1234567 is already exists");
+        verify(productDao).getProductById(anyInt());
+        verify(productDao).productExistsByTitle(anyString());
         verifyNoMoreInteractions(productDao);
     }
 

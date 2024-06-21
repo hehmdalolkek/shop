@@ -30,6 +30,7 @@ public class ProductDaoNamedParameterJdbcOperationsImpl implements ProductDao {
             "DO UPDATE SET title = EXCLUDED.title, price = EXCLUDED.price, active = EXCLUDED.active";
     private static final String UPDATE_PRODUCT_SET_ACTIVE_IS_FALSE_BY_ID = "UPDATE products SET active = false " +
             "WHERE product_id = :productId";
+    private static final String EXISTS_PRODUCT_BY_TITLE = "SELECT (EXISTS (SELECT * FROM products WHERE title = :title))";
 
     private final NamedParameterJdbcOperations namedJdbcOperations;
 
@@ -50,6 +51,13 @@ public class ProductDaoNamedParameterJdbcOperationsImpl implements ProductDao {
         } else {
             return Optional.of(products.get(0));
         }
+    }
+
+    @Transactional
+    @Override
+    public Boolean productExistsByTitle(String title) {
+        SqlParameterSource params = new MapSqlParameterSource("title", title);
+        return this.namedJdbcOperations.queryForObject(EXISTS_PRODUCT_BY_TITLE, params, Boolean.class);
     }
 
     @Transactional

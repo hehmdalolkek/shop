@@ -76,6 +76,32 @@ class ProductDaoTest {
     }
 
     @Test
+    @DisplayName("Given existing title, when productExistsByTitle, then returned true")
+    void givenExistingTitle_whenProductExistsByTitle_thenReturnTrue() {
+        // given
+        String title = "Apple";
+
+        // when
+        Boolean isExists = productDao.productExistsByTitle(title);
+
+        // then
+        assertThat(isExists).isTrue();
+    }
+
+    @Test
+    @DisplayName("Given non existing title, when productExistsByTitle, then returned false")
+    void givenNonExistingTitle_whenProductExistsByTitle_thenReturnFalse() {
+        // given
+        String title = "1234567";
+
+        // when
+        Boolean isExists = productDao.productExistsByTitle(title);
+
+        // then
+        assertThat(isExists).isFalse();
+    }
+
+    @Test
     @DisplayName("Given product without id, when saveProduct, then returned saved product")
     void givenProductWithoutId_whenSaveProduct_thenReturnSavedProduct() {
         // given
