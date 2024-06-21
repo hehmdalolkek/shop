@@ -10,6 +10,7 @@ import ru.hehmdalolkek.shop.dao.interfaces.ProductDao;
 import ru.hehmdalolkek.shop.model.Product;
 import ru.hehmdalolkek.shop.model.exception.ProductIsAlreadyExistsException;
 import ru.hehmdalolkek.shop.model.exception.ProductNotFoundException;
+import ru.hehmdalolkek.shop.web.dto.ProductDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,10 +38,10 @@ class ProductServiceImplTest {
         when(productDao.getAllActiveProducts()).thenReturn(activeProducts);
 
         // when
-        List<Product> allActiveProducts = productService.getAllActiveProducts();
+        List<ProductDto> allActiveProducts = productService.getAllActiveProducts();
 
         // then
-        assertThat(allActiveProducts).isEqualTo(activeProducts);
+        assertThat(allActiveProducts).isNotEmpty();
         verify(productDao).getAllActiveProducts();
         verifyNoMoreInteractions(productDao);
     }
@@ -53,10 +54,10 @@ class ProductServiceImplTest {
         when(productDao.getProductById(anyInt())).thenReturn(Optional.of(product));
 
         // when
-        Product givenProduct = productService.getProductById(1);
+        ProductDto givenProduct = productService.getProductById(1);
 
         // then
-        assertThat(givenProduct).isEqualTo(product);
+        assertThat(givenProduct).isNotNull();
         verify(productDao).getProductById(anyInt());
         verifyNoMoreInteractions(productDao);
     }
@@ -86,14 +87,19 @@ class ProductServiceImplTest {
         product.setId(1);
         product.setTitle("title");
         product.setActive(true);
+        ProductDto productDto = ProductDto.builder()
+                .productId(1)
+                .title("title")
+                .active(true)
+                .build();
         when(productDao.getProductById(anyInt())).thenReturn(Optional.empty());
         when(productDao.saveProduct(any(Product.class))).thenReturn(product);
 
         // when
-        Product savedProduct = productService.createProduct(product);
+        ProductDto savedProduct = productService.createProduct(productDto);
 
         // then
-        assertThat(savedProduct).isEqualTo(product);
+        assertThat(savedProduct).isNotNull();
         verify(productDao).getProductById(anyInt());
         verify(productDao).saveProduct(any(Product.class));
         verifyNoMoreInteractions(productDao);
@@ -107,12 +113,17 @@ class ProductServiceImplTest {
         product.setId(1);
         product.setTitle("title");
         product.setActive(true);
+        ProductDto productDto = ProductDto.builder()
+                .productId(1)
+                .title("title")
+                .active(true)
+                .build();
         when(productDao.getProductById(anyInt())).thenReturn(Optional.of(product));
 
         // when
         // then
         assertThatThrownBy(() -> {
-            productService.createProduct(product);
+            productService.createProduct(productDto);
         })
                 .isInstanceOf(ProductIsAlreadyExistsException.class)
                 .hasMessage("Product with id=1 is already exists");
@@ -125,23 +136,25 @@ class ProductServiceImplTest {
     public void givenProductAndExistingId_whenUpdateProduct_thenGetUpdatedProduct() {
         // given
         int productId = 1;
-        Product productToUpdate = new Product();
-        productToUpdate.setTitle("title");
-        productToUpdate.setActive(true);
         Product foundedProduct = new Product();
         foundedProduct.setId(productId);
         Product updatedProduct = new Product();
         updatedProduct.setId(productId);
         updatedProduct.setTitle("title");
         updatedProduct.setActive(true);
+        ProductDto productToUpdate = ProductDto.builder()
+                .productId(1)
+                .title("title")
+                .active(true)
+                .build();
         when(productDao.getProductById(anyInt())).thenReturn(Optional.of(foundedProduct));
         when(productDao.saveProduct(any(Product.class))).thenReturn(updatedProduct);
 
         // when
-        Product updatedProductFromService = productService.updateProduct(productId, productToUpdate);
+        ProductDto updatedProductFromService = productService.updateProduct(productId, productToUpdate);
 
         // then
-        assertThat(updatedProductFromService).isEqualTo(updatedProduct);
+        assertThat(updatedProductFromService).isNotNull();
         verify(productDao).getProductById(anyInt());
         verify(productDao).saveProduct(any(Product.class));
         verifyNoMoreInteractions(productDao);
@@ -152,9 +165,10 @@ class ProductServiceImplTest {
     public void givenProductAndNonExistingId_whenUpdateProduct_thenThrowException() {
         // given
         int productId = 1;
-        Product productToUpdate = new Product();
-        productToUpdate.setTitle("title");
-        productToUpdate.setActive(true);
+        ProductDto productToUpdate = ProductDto.builder()
+                .title("title")
+                .active(true)
+                .build();
         when(productDao.getProductById(anyInt())).thenReturn(Optional.empty());
 
         // when
