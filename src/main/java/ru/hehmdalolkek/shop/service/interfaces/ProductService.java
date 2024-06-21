@@ -1,18 +1,18 @@
 package ru.hehmdalolkek.shop.service.interfaces;
 
-import ru.hehmdalolkek.shop.model.Product;
+import ru.hehmdalolkek.shop.web.dto.ProductDto;
 
 import java.util.List;
 
 public interface ProductService {
 
-    List<Product> getAllActiveProducts();
+    List<ProductDto> getAllActiveProducts();
 
-    Product getProductById(int productId);
+    ProductDto getProductById(int productId);
 
-    Product createProduct(Product product);
+    ProductDto createProduct(ProductDto productDto);
 
-    Product updateProduct(int productId, Product product);
+    ProductDto updateProduct(int productId, ProductDto productDto);
 
     void softDeleteProductById(int productId);
 
