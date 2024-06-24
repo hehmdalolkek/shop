@@ -7,7 +7,6 @@ import ru.hehmdalolkek.shop.dao.interfaces.ProductDao;
 import ru.hehmdalolkek.shop.model.Product;
 import ru.hehmdalolkek.shop.model.exception.ProductIsAlreadyExistsException;
 import ru.hehmdalolkek.shop.model.exception.ProductNotFoundException;
-import ru.hehmdalolkek.shop.model.exception.ProductWithCurrentTitleIsAlreadyExistsException;
 import ru.hehmdalolkek.shop.service.interfaces.ProductService;
 import ru.hehmdalolkek.shop.web.dto.ProductDto;
 import ru.hehmdalolkek.shop.web.mapper.ProductMapper;
@@ -36,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public ProductDto getProductById(int productId) {
+    public ProductDto getProductById(int productId) throws ProductNotFoundException {
         Product product = this.productDao.getProductById(productId)
                 .orElseThrow(() ->
                         new ProductNotFoundException(format("Product with id=%d not found", productId)));
@@ -44,9 +43,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Transactional(rollbackFor = {ProductIsAlreadyExistsException.class,
-            ProductWithCurrentTitleIsAlreadyExistsException.class})
-    public ProductDto createProduct(ProductDto productDto) {
+    @Transactional(rollbackFor = ProductIsAlreadyExistsException.class)
+    public ProductDto createProduct(ProductDto productDto) throws ProductIsAlreadyExistsException {
         Product product = ProductMapper.INSTANCE.productDtoToProduct(productDto);
         if (product.getId() != null
                 && this.productDao.getProductById(product.getId()).isPresent()) {
@@ -54,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
                     format("Product with id=%d is already exists", product.getId()));
         }
         if (this.productDao.productExistsByTitle(product.getTitle())) {
-            throw new ProductWithCurrentTitleIsAlreadyExistsException(
+            throw new ProductIsAlreadyExistsException(
                     format("Product with title=%s is already exists", product.getTitle()));
         }
         Product savedProduct = this.productDao.saveProduct(product);
@@ -63,13 +61,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(rollbackFor = ProductNotFoundException.class)
-    public ProductDto updateProduct(int productId, ProductDto productDto) {
+    public ProductDto updateProduct(int productId, ProductDto productDto) throws ProductIsAlreadyExistsException {
         Product product = ProductMapper.INSTANCE.productDtoToProduct(productDto);
         Product foundedProduct = this.productDao.getProductById(productId)
                 .orElseThrow(() ->
                         new ProductNotFoundException(format("Product with id=%d not found", productId)));
         if (this.productDao.productExistsByTitle(product.getTitle())) {
-            throw new ProductWithCurrentTitleIsAlreadyExistsException(
+            throw new ProductIsAlreadyExistsException(
                     format("Product with title=%s is already exists", product.getTitle()));
         }
         foundedProduct.setTitle(product.getTitle());

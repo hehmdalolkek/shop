@@ -10,7 +10,6 @@ import ru.hehmdalolkek.shop.dao.interfaces.ProductDao;
 import ru.hehmdalolkek.shop.model.Product;
 import ru.hehmdalolkek.shop.model.exception.ProductIsAlreadyExistsException;
 import ru.hehmdalolkek.shop.model.exception.ProductNotFoundException;
-import ru.hehmdalolkek.shop.model.exception.ProductWithCurrentTitleIsAlreadyExistsException;
 import ru.hehmdalolkek.shop.web.dto.ProductDto;
 
 import java.util.List;
@@ -177,7 +176,7 @@ class ProductServiceImplTest {
         assertThatThrownBy(() -> {
             productService.createProduct(productDto);
         })
-                .isInstanceOf(ProductWithCurrentTitleIsAlreadyExistsException.class)
+                .isInstanceOf(ProductIsAlreadyExistsException.class)
                 .hasMessage("Product with title=1234567 is already exists");
         verify(productDao).productExistsByTitle(anyString());
         verifyNoMoreInteractions(productDao);
@@ -290,7 +289,7 @@ class ProductServiceImplTest {
         assertThatThrownBy(() -> {
             productService.updateProduct(productId, productDto);
         })
-                .isInstanceOf(ProductWithCurrentTitleIsAlreadyExistsException.class)
+                .isInstanceOf(ProductIsAlreadyExistsException.class)
                 .hasMessage("Product with title=1234567 is already exists");
         verify(productDao).getProductById(anyInt());
         verify(productDao).productExistsByTitle(anyString());
