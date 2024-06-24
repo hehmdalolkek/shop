@@ -1,8 +1,10 @@
 package ru.hehmdalolkek.shop.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.hehmdalolkek.shop.service.interfaces.ProductService;
@@ -13,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
+@Validated
 public class ProductController {
 
     private final ProductService productService;
@@ -34,7 +37,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody ProductDto product, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDto product, UriComponentsBuilder uriBuilder) {
         ProductDto createdProduct = this.productService.createProduct(product);
         return ResponseEntity.created(
                         uriBuilder
@@ -48,7 +51,7 @@ public class ProductController {
 
     @PutMapping("/{productId:\\d+}")
     public ResponseEntity<?> updateProductById(@PathVariable("productId") int productId,
-                                               @RequestBody ProductDto product) {
+                                               @Valid @RequestBody ProductDto product) {
         ProductDto updatedProduct = this.productService.updateProduct(productId, product);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
