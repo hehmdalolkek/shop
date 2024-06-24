@@ -18,8 +18,8 @@ public class ProductDto {
 
     @NotNull(message = "Price must not be null")
     @Min(value = 1, message = "Price must be greater than 0.99")
-    private double price;
+    private Double price;
 
-    private boolean active;
+    private Boolean active;
 
 }

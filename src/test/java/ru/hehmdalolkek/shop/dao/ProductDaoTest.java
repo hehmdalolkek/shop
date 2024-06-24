@@ -45,7 +45,7 @@ class ProductDaoTest {
         // then
         assertThat(products).isNotEmpty();
         assertThat(products).size().isEqualTo(4);
-        assertThat(products).allMatch(Product::isActive);
+        assertThat(products).allMatch(Product::getActive);
     }
 
     @Test
@@ -115,7 +115,7 @@ class ProductDaoTest {
         // then
         assertThat(createdProduct).isNotNull();
         assertThat(createdProduct.getId()).isNotNull();
-        assertThat(createdProduct.isActive()).isTrue();
+        assertThat(createdProduct.getActive()).isTrue();
         assertThat(createdProduct.getTitle()).isEqualTo(product.getTitle());
         assertThat(createdProduct.getPrice()).isEqualTo(product.getPrice());
     }
@@ -138,7 +138,7 @@ class ProductDaoTest {
         assertThat(updatedProduct.getId()).isEqualTo(product.getId());
         assertThat(updatedProduct.getTitle()).isEqualTo(product.getTitle());
         assertThat(updatedProduct.getPrice()).isEqualTo(product.getPrice());
-        assertThat(updatedProduct.isActive()).isEqualTo(product.isActive());
+        assertThat(updatedProduct.getActive()).isEqualTo(product.getActive());
     }
 
     @Test
@@ -159,7 +159,7 @@ class ProductDaoTest {
         assertThat(updatedProduct.getId()).isEqualTo(product.getId());
         assertThat(updatedProduct.getTitle()).isEqualTo(product.getTitle());
         assertThat(updatedProduct.getPrice()).isEqualTo(product.getPrice());
-        assertThat(updatedProduct.isActive()).isEqualTo(product.isActive());
+        assertThat(updatedProduct.getActive()).isEqualTo(product.getActive());
     }
 
     @Test
@@ -174,7 +174,7 @@ class ProductDaoTest {
 
         // then
         assertThat(product).isPresent();
-        assertThat(product.get().isActive()).isFalse();
+        assertThat(product.get().getActive()).isFalse();
     }
 
     @Test

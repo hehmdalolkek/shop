@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
                     format("Product with title=%s is already exists", product.getTitle()));
         }
         foundedProduct.setTitle(product.getTitle());
-        foundedProduct.setActive(product.isActive());
+        foundedProduct.setActive(product.getActive());
         foundedProduct.setPrice(product.getPrice());
         Product savedProduct = this.productDao.saveProduct(foundedProduct);
         return ProductMapper.INSTANCE.productToProductDto(savedProduct);

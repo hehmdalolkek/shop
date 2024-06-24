@@ -67,7 +67,7 @@ public class ProductDaoNamedParameterJdbcOperationsImpl implements ProductDao {
                 .addValue("productId", product.getId())
                 .addValue("title", product.getTitle())
                 .addValue("price", product.getPrice())
-                .addValue("active", product.isActive());
+                .addValue("active", product.getActive());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         if (product.getId() != null) {
             this.namedJdbcOperations.update(

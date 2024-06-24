@@ -9,8 +9,8 @@ public class Product {
 
     private String title;
 
-    private double price;
+    private Double price;
 
-    private boolean active;
+    private Boolean active;
 
 }
