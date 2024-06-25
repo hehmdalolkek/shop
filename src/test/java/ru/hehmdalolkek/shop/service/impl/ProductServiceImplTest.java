@@ -189,6 +189,7 @@ class ProductServiceImplTest {
         int productId = 1;
         Product foundedProduct = new Product();
         foundedProduct.setId(productId);
+        foundedProduct.setTitle("Apple");
         Product updatedProduct = new Product();
         updatedProduct.setId(productId);
         updatedProduct.setTitle("title");
@@ -245,6 +246,7 @@ class ProductServiceImplTest {
         product.setActive(true);
         Product foundedProduct = new Product();
         foundedProduct.setId(productId);
+        foundedProduct.setTitle("Apple");
         ProductDto productDto = ProductDto.builder()
                 .productId(productId)
                 .title("1234567")
@@ -276,6 +278,7 @@ class ProductServiceImplTest {
         product.setActive(true);
         Product foundedProduct = new Product();
         foundedProduct.setId(productId);
+        foundedProduct.setTitle("Apple");
         ProductDto productDto = ProductDto.builder()
                 .productId(productId)
                 .title("1234567")
