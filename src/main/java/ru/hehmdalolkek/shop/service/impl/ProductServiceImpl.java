@@ -14,7 +14,7 @@ import ru.hehmdalolkek.shop.web.mapper.ProductMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 @RequiredArgsConstructor
 @Service
@@ -66,7 +66,8 @@ public class ProductServiceImpl implements ProductService {
         Product foundedProduct = this.productDao.getProductById(productId)
                 .orElseThrow(() ->
                         new ProductNotFoundException(format("Product with id=%d not found", productId)));
-        if (this.productDao.productExistsByTitle(product.getTitle())) {
+        if (!foundedProduct.getTitle().equals(product.getTitle())
+                && this.productDao.productExistsByTitle(product.getTitle())) {
             throw new ProductIsAlreadyExistsException(
                     format("Product with title=%s is already exists", product.getTitle()));
         }
