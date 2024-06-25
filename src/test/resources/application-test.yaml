@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: shop
+  config:
+    import: optional:file:.env[.properties]
+  liquibase:
+    change-log: db/changelog/main-changelog.xml
+  security:
+    user:
+      name: ${SECURITY_USERNAME_TEST}
+      password: ${SECURITY_PASSWORD_TEST}
+      roles: ${SECURITY_ROLES_TEST}
+
+security:
+  username: ${SECURITY_USERNAME_TEST}
+  password: ${SECURITY_PASSWORD_TEST}
