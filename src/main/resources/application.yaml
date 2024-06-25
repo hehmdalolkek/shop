@@ -10,3 +10,8 @@ spring:
     password: ${POSTGRES_PASSWORD}
   liquibase:
     change-log: db/changelog/main-changelog.xml
+  security:
+    user:
+      name: ${SECURITY_USERNAME}
+      password: ${SECURITY_PASSWORD}
+      roles: ${SECURITY_ROLES}
