@@ -6,4 +6,4 @@ VALUES
     (4, 'Orange', 45.22, true),
     (5, 'Mango', 200.40, false);
 
-SELECT setval('products_product_id_seq', (SELECT MAX(product_id) FROM products) + 1);
+SELECT setval('products_product_id_seq', (SELECT MAX(product_id) FROM products));
