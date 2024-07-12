@@ -40,6 +40,6 @@ SECURITY_ROLES_TEST=ADMIN
 git clone https://github.com/hehmdalolkek/shop.git
 cd shop
 ./mvnw package
-java -jar target/*.jar`
+java -jar target/shop-0.0.1-SNAPSHOT.jar
 ```
 4. You can then access the project at http://localhost:8080/.
