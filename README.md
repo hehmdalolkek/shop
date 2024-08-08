@@ -37,8 +37,6 @@ SECURITY_ROLES_TEST=ADMIN
 ```
 3. Finally, you can build a jar file and run it from the command line:
 ```
-git clone https://github.com/hehmdalolkek/shop.git
-cd shop
 ./mvnw package
 java -jar target/shop-0.0.1-SNAPSHOT.jar
 ```
